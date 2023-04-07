@@ -7,7 +7,7 @@ from typer import Option, Typer
 from .core import generate_pyboost_json, get_current_path, get_path_name
 
 console = Console()
-app = Typer()
+app = Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command(help="Configure PyBoost for python projects.")
