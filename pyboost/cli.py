@@ -22,10 +22,14 @@ def project_settings(
         help="Add the .python-version file to the project.",
     ),
     add_poetry: bool = Option(
-        ..., "--add-poetry", "-poetry", "-p", help="Add the poetry to project."
+        False,
+        "--add-poetry",
+        "-poetry",
+        "-p",
+        help="Add the poetry to project.",
     ),
     add_dotenv: bool = Option(
-        ...,
+        False,
         "--add-dotenv",
         "-dotenv",
         "-env",
@@ -38,6 +42,11 @@ def project_settings(
         "-f",
         help="Add the black formatter and isort.",
     ),
+    add_makefile: bool = Option(
+      False,
+      '--add-makefile', '-makefile', '-make',
+      help='Add makefile to project.',  
+    ),
     with_django: bool = Option(
         False, "--with-django", "-dj", help="Add Django Framework to project."
     ),
@@ -49,10 +58,11 @@ def project_settings(
 
     Args:
         name_project (str, optional): Option to choose the name of the project.
-        add_python_version (float, required): Option for python version.
-        add_poetry (bool, required): Option needed to add poetry to the project.
-        add_dotenv (bool, required): Option needed to add the dotenv file to the project.
+        add_python_version (float, required): Option needed to add python version file (.python-version).
+        add_poetry (bool, optional): Option to add person to project. Otherwise, pip will be used with virtualenv.
+        add_dotenv (bool, optional): Option to add the dotenv file to the project.
         add_format (bool, optional): Option to add black formatter and isort.
+        add_makefile (bool, optional): Option to add makefile to project.
         with_django (bool, optional): Option to add Django Framework to project.
         with_tailwind (bool, optional): Option to add TailwindCSS to project.
     """
