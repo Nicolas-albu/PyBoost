@@ -1,1 +1,3 @@
 pyboost_config.json
+scripts/
+__pycache__
