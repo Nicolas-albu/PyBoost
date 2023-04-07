@@ -1,10 +1,13 @@
+"""This module contains all PyBoost CLI commands."""
+
 from rich.console import Console
+from rich.progress import Progress
 from typer import Option, Typer
 
-from .core import get_path_name
+from .core import generate_pyboost_json, get_current_path, get_path_name
 
 console = Console()
-app = Typer()
+app = Typer(pretty_exceptions_show_locals=False)
 
 
 @app.command(help="Configure PyBoost for python projects.")
@@ -15,7 +18,7 @@ def project_settings(
         "-np",
         help="The name of the project.",
     ),
-    add_python_version: float = Option(
+    add_python_version: str = Option(
         ...,
         "--python-version",
         "-pv",
@@ -43,9 +46,11 @@ def project_settings(
         help="Add the black formatter and isort.",
     ),
     add_makefile: bool = Option(
-      False,
-      '--add-makefile', '-makefile', '-make',
-      help='Add makefile to project.',  
+        False,
+        "--add-makefile",
+        "-makefile",
+        "-make",
+        help="Add makefile to project.",
     ),
     with_django: bool = Option(
         False, "--with-django", "-dj", help="Add Django Framework to project."
@@ -66,4 +71,26 @@ def project_settings(
         with_django (bool, optional): Option to add Django Framework to project.
         with_tailwind (bool, optional): Option to add TailwindCSS to project.
     """
-    ...
+    with Progress() as progress:
+        task_generate_pyboost_json = progress.add_task(
+            "[bold yellow]Generate pyboost.json", total=100
+        )
+
+        while not progress.finished:
+            progress.update(task_generate_pyboost_json, advance=0.5)
+
+            generate_pyboost_json(
+                name_project=name_project,
+                add_python_version=add_python_version,
+                add_poetry=add_poetry,
+                add_dotenv=add_dotenv,
+                add_format=add_format,
+                add_makefile=add_makefile,
+                with_django=with_django,
+                with_tailwind=with_tailwind,
+            )
+
+    console.print_json((get_current_path() / "pyboost.json").read_text())
+    console.print(
+        f"\n[bold green]{name_project} configured![/bold green] :rocket:"
+    )
