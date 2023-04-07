@@ -6,7 +6,7 @@ from pyboost import app, get_path_name
 runner = CliRunner()
 
 
-class TestPyBoostSettings:
+class TestProjectSettings:
     OTHER_NAME = "TestPyBoost"
 
     @pytest.fixture
