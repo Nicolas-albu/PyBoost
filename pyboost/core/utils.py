@@ -10,6 +10,15 @@ from json import dump
 from pathlib import Path
 
 
+def get_testing_path() -> Path:
+    """Gets the path for testing the PyBoostCLI.
+
+    Returns:
+        Path: _description_
+    """
+    return Path().cwd() / "scripts" / "testing"
+
+
 def get_path_name() -> str:
     """Gets the name of the folder where PyBoost is running.
 
@@ -33,7 +42,7 @@ def generate_pyboost_json(**params_json) -> None:
 
     Args:
         name_project (str, optional): Option to choose the name of the project.
-        add_python_version (float, required): Option needed to add python version file (.python-version).
+        add_python_version (str, required): Option needed to add python version file (.python-version).
         add_poetry (bool, optional): Option to add person to project. Otherwise, pip will be used with virtualenv.
         add_dotenv (bool, optional): Option to add the dotenv file to the project.
         add_format (bool, optional): Option to add black formatter and isort.
@@ -41,5 +50,6 @@ def generate_pyboost_json(**params_json) -> None:
         with_django (bool, optional): Option to add Django Framework to project.
         with_tailwind (bool, optional): Option to add TailwindCSS to project.
     """
-    with open("pyboost.json", "w") as file:
+    # with open((get_current_path() / "pyboost.json"), "w") as file:
+    with open((get_testing_path() / "pyboost.json"), "w") as file:
         dump(params_json, file, indent=4)
