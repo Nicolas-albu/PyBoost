@@ -4,7 +4,8 @@ from rich.console import Console
 from rich.progress import Progress
 from typer import Option, Typer
 
-from .core import generate_pyboost_json, get_current_path, get_path_name
+from .core import (Generator, generate_pyboost_json, get_current_path,
+                   get_path_name, get_testing_path)
 
 console = Console()
 app = Typer(pretty_exceptions_show_locals=False)
@@ -78,7 +79,6 @@ def project_settings(
 
         while not progress.finished:
             progress.update(task_generate_pyboost_json, advance=0.5)
-
             generate_pyboost_json(
                 name_project=name_project,
                 add_python_version=add_python_version,
@@ -90,7 +90,25 @@ def project_settings(
                 with_tailwind=with_tailwind,
             )
 
-    console.print_json((get_current_path() / "pyboost.json").read_text())
+    with Progress() as progress:
+        task_create_files = progress.add_task(
+            "[bold red]Creating files[/bold red]", total=100
+        )
+        while not progress.finished:
+            progress.update(task_create_files, advance=0.5)
+            Generator(
+                name_project=name_project,
+                add_python_version=add_python_version,
+                add_poetry=add_poetry,
+                add_dotenv=add_dotenv,
+                add_format=add_format,
+                add_makefile=add_makefile,
+                with_django=with_django,
+                with_tailwind=with_tailwind,
+            ).run()
+
+    # console.print_json((get_current_path() / "pyboost.json").read_text())
+    console.print_json((get_testing_path() / "pyboost.json").read_text())
     console.print(
         f"\n[bold green]{name_project} configured![/bold green] :rocket:"
     )
