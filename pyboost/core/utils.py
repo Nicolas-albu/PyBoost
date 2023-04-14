@@ -37,6 +37,13 @@ def get_current_path() -> Path:
     return Path().cwd()
 
 
+# def exclude_directory(datas: dict):
+#     # verifica se o objeto é um dicionário e remove a chave "directory"
+#     if isinstance(datas, dict) and "directory" in datas:
+#         datas.pop("senha")
+#     return datas
+
+
 def generate_pyboost_json(**params_json) -> None:
     """Generate the PyBoost configuration file (pyboost.json).
 
@@ -51,5 +58,13 @@ def generate_pyboost_json(**params_json) -> None:
         with_tailwind (bool, optional): Option to add TailwindCSS to project.
     """
     # with open((get_current_path() / "pyboost.json"), "w") as file:
-    with open((get_testing_path() / "pyboost.json"), "w") as file:
+    with open(params_json["directory"] / "pyboost.json", "w") as file:
+        params_json.pop("directory")
         dump(params_json, file, indent=4)
+
+
+def processing_directory(directory: Path) -> Path:
+    if directory.is_relative_to("C:"):
+        return directory
+    elif directory.is_relative_to(""):
+        return get_current_path().joinpath(directory)

@@ -6,8 +6,7 @@ tipos de arquivos.
 
 import codecs
 import subprocess
-
-from .utils import get_current_path, get_testing_path
+from pathlib import Path
 
 
 class Generator:
@@ -25,6 +24,8 @@ class Generator:
             with_tailwind (bool, optional): Option to add TailwindCSS to project.
         """
         self.config: dict = configurations
+        self.directory: Path = self.config["directory"]
+        self.config.pop("directory")
 
     def run(self) -> None:
         generation_cases: dict = {
@@ -37,61 +38,57 @@ class Generator:
 
         for param, value in self.config.items():
             if value:
-                generation_cases.get(param, None)()
+                generation_cases.get(param)()
 
     def add_main_folder(self) -> None:
         if not self.config["with_django"]:
-            # self.main_folder = get_current_path() / self.config["name_project"]
-            self.main_folder = get_testing_path() / self.config["name_project"]
+            self.main_folder = self.directory / self.config["name_project"]
             self.main_folder.mkdir(exist_ok=True)
 
     def add_dotenv_file(self) -> None:
         if self.config["add_dotenv"] and not self.config["with_django"]:
-            # with open((get_current_path() / ".env"), "w") as _:
-            with open((get_testing_path() / ".env"), "w") as _:
+            with (self.directory / ".env").open("w") as _:
                 ...
 
     def add_python_version_file(self) -> None:
         if self.config["add_python_version"]:
-            with open(
-                # (get_current_path() / ".python-version"), "w"
-                (get_testing_path() / ".python-version"),
-                "w",
+            with (self.directory / ".python-version").open(
+                "w"
             ) as python_version_file:
                 python_version_file.write(self.config["add_python_version"])
 
     def add_makefile(self) -> None:
         if self.config["add_makefile"]:
-            with open(
-                # (get_current_path() / "Makefile"), "w"
-                (get_testing_path() / "Makefile"),
-                "w",
+            with (self.directory / "Makefile").open(
+                "w"
             ) as python_version_file:
                 ...
 
     def add_poetry(self) -> None:
         if self.config["add_poetry"]:
             with codecs.open(
-                (get_testing_path() / "pyproject.toml"), "w", encoding="utf-8"
+                self.directory / "pyproject.toml", "w", encoding="utf-8"
             ) as poetry_file:
                 poetry_file.write(
-                    """
-            [tool.poetry]
-            name = "testado"
-            version = "0.1.0"
-            description = ""
-            authors = ["Nícolas Albuquerque Ramos <nicolasalbuquerque581@gmail.com>"]
-            readme = "README.md"
-
-            [tool.poetry.dependencies]
-            python = "^3.10"
-
-
-            [build-system]
-            requires = ["poetry-core"]
-            build-backend = "poetry.core.masonry.api"
-
-                """
+                    "[tool.poetry]\n"
+                    + f'name = "{ self.config["name_project"] }"\n'
+                    + 'version = "0.1.0"\n'
+                    + 'description = ""\n'
+                    + 'authors = ["Nícolas Albuquerque Ramos <nicolasalbuquerque581@gmail.com>"]\n'
+                    + 'readme = "README.md"\n'
                 )
 
-            # subprocess.run('poetry shell', shell=True)
+                poetry_file.write(
+                    "\n[tool.poetry.dependencies]\n"
+                    + f'python = "^{ self.config["add_python_version"] }"\n'
+                )
+
+                poetry_file.write(
+                    "\n[build-system]\n"
+                    + 'requires = ["poetry-core"]\n'
+                    + 'build-backend = "poetry.core.masonry.api"\n'
+                )
+
+        with (self.directory / ".log").open("w") as poetry_output:
+            poetry_output.write('')
+            subprocess.run("poetry shell", shell=True, stdout=poetry_output)
