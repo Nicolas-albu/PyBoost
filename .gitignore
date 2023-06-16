@@ -2,3 +2,4 @@ pyboost.json
 scripts/
 __pycache__
 .pytest_cache/
+.vscode
