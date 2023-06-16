@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "pyboost"
 version = "0.1.0"
-description = "Ferramenta de linha de comando (CLI) que visa acelerar o desenvolvimento de aplicativos em Python."
-authors = ["Nícolas Albuquerque Ramos <nicolasalbuquerque581@gmail.com>"]
+description = "Command line tool (CLI) aimed at accelerating the development of Python applications."
+authors = ["Nícolas Albuquerque Ramos <nicolas.albu@outlook.com>"]
 license = "MIT License"
 readme = "README.md"
 
@@ -18,10 +18,7 @@ rich = "^13.3.3"
 black = "^23.3.0"
 isort = "^5.12.0"
 pytest = "^7.2.2"
-
-[tool.black]
-skip-string-normalization = true
-line-length = 79
+pylint = "^2.17.4"
 
 [build-system]
 requires = ["poetry-core"]
