@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "pyboost"
+name = "pyboot"
 version = "0.1.0"
-description = "Command line tool (CLI) aimed at accelerating the development of Python applications."
+description = "Command-line tool (CLI) to speed up Django project startup."
 authors = ["Nícolas Albuquerque Ramos <nicolas.albu@outlook.com>"]
 license = "MIT License"
 readme = "README.md"
 
 [tool.poetry.scripts]
-pyboost = "pyboost.cli:app"
+pyboot = "pyboot.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -19,6 +19,10 @@ black = "^23.3.0"
 isort = "^5.12.0"
 pytest = "^7.2.2"
 pylint = "^2.17.4"
+
+[tool.black]
+skip-string-normalization = true
+line-length = 79
 
 [build-system]
 requires = ["poetry-core"]
