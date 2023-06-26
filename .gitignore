@@ -1,5 +1,6 @@
 pyboost.json
-scripts/
+scripts/scripts.py
 __pycache__
 .pytest_cache/
 .vscode
+ideas.txt
