@@ -13,16 +13,21 @@ pyboot = "pyboot.cli:app"
 python = "^3.10"
 typer-cli = "^0.0.13"
 rich = "^13.3.3"
+toml = "^0.10.2"
+pyyaml = "^6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 isort = "^5.12.0"
 pytest = "^7.2.2"
-pylint = "^2.17.4"
+flake8 = "^6.0.0"
 
 [tool.black]
 skip-string-normalization = true
 line-length = 79
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core"]
