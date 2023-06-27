@@ -34,7 +34,7 @@ add_python_version = "3.10.10"
 2. Ter o Poetry instalado na sua máquina.
 3. Instalar todas as dependências do projeto: `poetry install`
 
-:rocket: Pronto, agora é só utilizar a PyBoost com `poetry run pyboot --help`
+:rocket: Pronto, agora é só utilizar a PyBoot com `poetry run pyboot --help`
 
 ## :rotating_light: **Licença**
 
