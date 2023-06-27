@@ -1,8 +1,9 @@
+from datetime import datetime
 from pathlib import Path
 
 from rich.console import Console
-from rich.progress import Progress
 
+from .pyboot import PyBoot
 from .settings import __NAME_CONFIG_FILE__
 
 
@@ -10,27 +11,26 @@ class BeautifyConsole:
     def __init__(self):
         self.console = Console()
 
-    def final_message_printing(
-        self, directory: Path, name_project: str, /
-    ) -> None:
+    def final_message(self, directory: Path, name_project: str, /) -> None:
         # get the configurations of project
-        pyboost_config = (directory / __NAME_CONFIG_FILE__).read_text()
+        pyboot_config = (directory / __NAME_CONFIG_FILE__).read_text()
 
         # printing results
-        self.console.print(pyboost_config)
+        self.console.print(pyboot_config)
         self.console.print(
-            f'\n[bold green]{name_project!r} configured![/bold green] :rocket:'
+            '[bold green]'
+            f'{name_project!r} configured!'
+            '[/bold green] :rocket:'
         )
 
-    def add_progressbar(self) -> None:
-        with Progress() as progress:
-            task_generate_pyboost_json = progress.add_task(
-                '[bold yellow]Generate pyboost.json', total=100
-            )
-            task_create_files = progress.add_task(
-                '[bold red]Creating files[/bold red]', total=100
-            )
+    def add_status(self, pyboot_project: PyBoot, name_project):
+        status_message = (
+            ':gear:[bold yellow] Creating project...[/bold yellow]'
+        )
 
-            while not progress.finished:
-                progress.update(task_generate_pyboost_json, advance=0.5)
-                progress.update(task_create_files, advance=0.5)
+        with self.console.status(status_message):
+            for task in pyboot_project.run():
+                actual_hour = f'{datetime.now():%H:%M:%S}'
+                self.console.print(
+                    f'[bold yellow]{actual_hour} [bold blue]{task}'
+                )
