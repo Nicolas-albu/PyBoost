@@ -37,13 +37,19 @@ class Environment:
         subprocess.run(
             [self.venv_pip, "install", "-U", "pip", "setuptools"],
             check=True,
+            stdout=open(os.devnull, 'w'),
         )
 
     def execute(self, command: str, /) -> None:
         # command = command.replace('$PYTHON_VENV', str(self.venv_python))
         # args_command = command.split()
 
-        subprocess.run([command], check=True, shell=True)
+        subprocess.run(
+            [command],
+            check=True,
+            shell=True,
+            stdout=open(os.devnull, 'w'),
+        )
 
     def add_dependency(
         self, dependency: str, *, version: str = 'latest'
