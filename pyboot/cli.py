@@ -41,13 +41,6 @@ def pyboot_controller(
             'to the project with the specified Python version.'
         ),
     ),
-    add_dotenv: bool = Option(
-        False,
-        '--add-dotenv',
-        '-dotenv',
-        '-env',
-        help='Configure and add dotenv file to project.',
-    ),
     add_format: bool = Option(
         False,
         '--add-format',
@@ -76,9 +69,6 @@ def pyboot_controller(
         directory: The directory of the project.
         add_python_version: Add the .python-version file to the project with
             the specified Python version.
-        add_poetry: Use Poetry to manage the project dependencies instead of
-            pip and virtualenv.
-        add_dotenv: Configure and add dotenv file to project.
         add_format: Add the black formatter and isort to the project.
         add_makefile: Add a makefile to the project.
         with_drf: Add the Django Rest Framework to the project.
@@ -91,7 +81,6 @@ def pyboot_controller(
         'name_project': name_project,
         'directory': directory,
         'add_python_version': add_python_version,
-        'add_dotenv': add_dotenv,
         'add_format': add_format,
         'add_makefile': add_makefile,
         'with_drf': with_drf,
