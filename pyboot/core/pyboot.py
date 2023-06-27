@@ -3,6 +3,8 @@ This module provides the PyBoot class for building projects with PyBoot
 configuration.
 """
 
+from typing import Generator
+
 from .builder import Builder
 from .environment import Environment
 
@@ -51,7 +53,7 @@ class PyBoot:
         self.__builder = Builder(directory=__directory)
         self.__venv = Environment(project_path=__directory)
 
-    def run(self) -> None:
+    def run(self) -> Generator:
         """
         Run the project building process.
 
@@ -69,15 +71,21 @@ class PyBoot:
         if self.__options['add_makefile']:
             self.__builder.add_makefile()
 
+        yield 'General settings completed'
+
         # environment settings
         self.__venv.add_dependency('django', version="4.2.2")
         self.__venv.add_dependency('dynaconf')
         self.__venv.export_django_settings(self.__name_project)
 
+        yield 'Environment settings completed'
+
         # django settings
         self.__builder.add_main_folder(self.__venv, self.__name_project)
         self.__builder.add_settings_files(self.__name_project)
         self.__builder.configure_static_folder(self.__venv)
+
+        yield 'Django settings completed'
 
     def __create_pyboot_config_file(self, data: dict, /) -> None:
         """
