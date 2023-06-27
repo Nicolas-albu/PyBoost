@@ -11,7 +11,7 @@ __PATH_NAME__: str = Path().cwd().name
 
 __BASE_DIR__ = Path(dirname(abspath(__file__))).parent.parent
 
-__SCRIPTS_PATH__: Path = __BASE_DIR__ / 'scripts'
+__SCRIPTS_PATH__: Path = __BASE_DIR__ / 'scripts' / 'django_blank'
 
 __SECRETS_CONF_DJANGO__: Path = __SCRIPTS_PATH__ / 'secrets_conf_django.yaml'
 

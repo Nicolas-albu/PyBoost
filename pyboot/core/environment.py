@@ -49,7 +49,7 @@ class Environment:
         self, dependency: str, *, version: str = 'latest'
     ) -> None:
         if version != 'latest':
-            dependency += '=' + version
+            dependency += '==' + version
 
         command = f'{self.venv_pip} install {dependency}'
 
