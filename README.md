@@ -1,45 +1,29 @@
-# :zap: **PyBoost**
-
-:thinking: **O motivo dessa branch é para adicionar o schema do arquivo pyboost.json**
-
-## :pushpin: **Tarefas**
-
-- [x] Configurar o Typer
-- [x] Configurar o Rich
-- [ ] Gerar o esquema do pyboost.json
-- [ ] Desenvolver as opções do CLI
-  - [ ] Geração de um projeto Django com dotenv
-  - [ ] Integração de um projeto Django com Tailwind
+# :zap: **PyBoot**
 
 ## :thinking: **Como usar?**
 
 :point_right: Para ver as opções disponíveis, digite:
 
 ```console
-$ poetry run pyboost --help
+$ poetry run pyboot --help
 ```
 
-:point_right: Para criar um arquivo de configuração do PyBoost (pyboost.json), basta inserir as opções desejadas para o seu projeto ao executar o CLI. Automaticamente, um arquivo pyboost.json será gerado no diretório em que você estiver executando o comando.
+:point_right: Para criar um arquivo de configuração do PyBoot, basta inserir as opções desejadas para o seu projeto ao executar o CLI. Automaticamente, um arquivo pyboot.toml será gerado no diretório do novo projeto Django.
 
 ```console
-$ poetry run pyboost -np test_py_boost -pv 3.10
+$ poetry run pyboot -np test_pyboot -pv 3.10.10
 ```
 
 ```console
 # Output
-Generate pyboost.json ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-{
-  "name_project": "test_py_boost",
-  "add_python_version": "3.10",
-  "add_poetry": false,
-  "add_dotenv": false,
-  "add_format": false,
-  "add_makefile": false,
-  "with_django": false,
-  "with_tailwind": false
-}
+02:18:54 General settings completed
+02:18:59 Environment settings completed
+02:19:00 Django settings completed
+name_project = "test_pyboot"
+directory = "/path/of/project/blogger"
+add_python_version = "3.10.10"
 
-test_py_boost configured! 🚀
+'test_pyboot' configured! 🚀
 ```
 
 ## :warning: **Avisos**
@@ -54,4 +38,4 @@ test_py_boost configured! 🚀
 
 ## :rotating_light: **Licença**
 
-O projeto PyBoost é distribuído sob a licença MIT, o que significa que é um software livre e que pode ser utilizado, modificado e distribuído livremente, desde que seja incluída uma cópia da licença.
+O projeto PyBoot é distribuído sob a licença MIT, saiba mais em [LICENSE](LICENSE).
