@@ -33,9 +33,6 @@ class PyBoot:
                 - directory: The directory of the project.
                 - add_python_version: Add the .python-version file to the
                     project with the specified Python version.
-                - add_poetry: Use Poetry to manage the project dependencies
-                    instead of pip and virtualenv.
-                - add_dotenv: Configure and add dotenv file to project.
                 - add_format: Add the black formatter and isort to the project.
                 - add_makefile: Add a makefile to the project.
                 - with_drf: Add the Django Rest Framework to the project.
