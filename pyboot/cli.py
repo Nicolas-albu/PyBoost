@@ -86,7 +86,8 @@ def pyboot_controller(
         'with_drf': with_drf,
     }
 
-    beautify.add_progressbar()
-    PyBoot(**params).run()  # building projects with PyBoot configuration
+    # building projects with PyBoot configuration
+    pyboot_project = PyBoot(**params)
 
-    beautify.final_message_printing(directory, name_project)
+    beautify.add_status(pyboot_project, name_project)
+    beautify.final_message(directory, name_project)
