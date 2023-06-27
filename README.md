@@ -28,13 +28,13 @@ add_python_version = "3.10.10"
 
 ## :warning: **Avisos**
 
-É importante notar a PyBoost está em fase desenvolvimento. Mas se você quiser utilizar mesmo assim, você terá que:
+É importante notar a PyBoot está em fase desenvolvimento. Mas se você quiser utilizar mesmo assim, você terá que:
 
-1. Clonar esse repósitório e acessar essa branch feature.
+1. Clonar esse repositório e acessar essa branch feature.
 2. Ter o Poetry instalado na sua máquina.
 3. Instalar todas as dependências do projeto: `poetry install`
 
-:rocket: Pronto, agora é só utilizar a PyBoost com `poetry run pyboost --help`
+:rocket: Pronto, agora é só utilizar a PyBoost com `poetry run pyboot --help`
 
 ## :rotating_light: **Licença**
 
