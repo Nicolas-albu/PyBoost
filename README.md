@@ -1,14 +1,14 @@
 # :zap: **PyBoot**
 
-## :thinking: **Como usar?**
+## :thinking: **How ​​to use?**
 
-:point_right: Para ver as opções disponíveis, digite:
+:point_right: To see the available options, type:
 
 ```console
 $ poetry run pyboot --help
 ```
 
-:point_right: Para criar um arquivo de configuração do PyBoot, basta inserir as opções desejadas para o seu projeto ao executar o CLI. Automaticamente, um arquivo pyboot.toml será gerado no diretório do novo projeto Django.
+:point_right: To create a PyBoot configuration file, simply enter the desired options for your project when running the CLI. Automatically, a pyboot.toml file will be generated in the new Django project directory.
 
 ```console
 $ poetry run pyboot -np test_pyboot -pv 3.10.10
@@ -20,22 +20,22 @@ $ poetry run pyboot -np test_pyboot -pv 3.10.10
 02:18:59 Environment settings completed
 02:19:00 Django settings completed
 name_project = "test_pyboot"
-directory = "/path/of/project/blogger"
-add_python_version = "3.10.10"
+directory="/path/of/project/blogger"
+add_python_version="3.10.10"
 
 'test_pyboot' configured! 🚀
 ```
 
-## :warning: **Avisos**
+## :warning: **Warnings**
 
-É importante notar a PyBoot está em fase desenvolvimento. Mas se você quiser utilizar mesmo assim, você terá que:
+It's important to note that PyBoot is in the development stage. But if you want to use it anyway, you'll have to:
 
-1. Clonar esse repositório e acessar essa branch feature.
-2. Ter o Poetry instalado na sua máquina.
-3. Instalar todas as dependências do projeto: `poetry install`
+1. Clone this repository and access this feature branch.
+2. Have Poetry installed on your machine.
+3. Install all project dependencies: `poetry install`
 
-:rocket: Pronto, agora é só utilizar a PyBoot com `poetry run pyboot --help`
+:rocket: Done, now just use PyBoot with `poetry run pyboot --help`
 
-## :rotating_light: **Licença**
+## :rotating_light: **License**
 
-O projeto PyBoot é distribuído sob a licença MIT, saiba mais em [LICENSE](LICENSE).
+The PyBoot project is distributed under the MIT license, learn more at [LICENSE](LICENSE).
