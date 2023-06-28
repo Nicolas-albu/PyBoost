@@ -74,8 +74,8 @@ class PyBoot:
         yield 'General settings completed'
 
         # environment settings
-        self.__venv.add_dependency('django', version="4.2.2")
-        self.__venv.add_dependency('dynaconf')
+        self.__venv.add_dependency('Django', version='4.2.2')
+        self.__venv.add_dependency('dynaconf', version='3.1.12')
         self.__venv.export_django_settings(self.__name_project)
 
         yield 'Environment settings completed'
