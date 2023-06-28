@@ -12,12 +12,9 @@ import yaml
 
 from .environment import Environment
 from .settings import (
-    __GITIGNORE_DJANGO__,
+    __ENVIRONMENT_STAGES__,
     __NAME_CONFIG_FILE__,
-    __REQUIREMENTS__,
-    __SECRETS_CONF_DJANGO__,
-    __SETTINGS_CONF_DJANGO__,
-    __SETTINGS_DJANGO__,
+    template_django_blank,
 )
 
 
@@ -92,25 +89,32 @@ class Builder:
 
         secrets_project = self.__directory / '.secrets.yaml'
 
-        files_to_copy = [
-            (__SECRETS_CONF_DJANGO__, secrets_project),
-            (__SETTINGS_DJANGO__, settings_django_project),
-            (__GITIGNORE_DJANGO__, self.__directory / '.gitignore'),
-            (__REQUIREMENTS__, self.__directory / 'requirements.txt'),
-            (__SETTINGS_CONF_DJANGO__, self.__directory / 'settings.yaml'),
-        ]
+        target_files = (
+            secrets_project,
+            settings_django_project,
+            self.__directory / '.gitignore',
+            self.__directory / 'settings.yaml',
+            self.__directory / 'requirements.txt',
+        )
 
-        for source, destination in files_to_copy:
-            shutil.copy2(source, destination)
+        for source, target in zip(
+            template_django_blank,
+            target_files,
+        ):
+            target.touch()
+            shutil.copy2(source, target)
 
         self._configure_dynaconf_secret_file(secrets_project)
-        self._configure_settings_django(settings_django_project, name_project)
+        self._configure_settings_django(
+            settings_django_project,
+            name_project,
+        )
 
     def _configure_dynaconf_secret_file(self, secrets_project: Path) -> None:
         with open(secrets_project, 'r', encoding='utf-8') as file:
             _secrets_config = yaml.safe_load(file)
 
-        for stage in 'development', 'testing', 'production':
+        for stage in __ENVIRONMENT_STAGES__:
             _secrets_config[stage]['SECRET_KEY'] = self._generate_token(
                 maxsize=60
             )
