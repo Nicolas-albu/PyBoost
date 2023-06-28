@@ -14,6 +14,7 @@ from .environment import Environment
 from .settings import (
     __GITIGNORE_DJANGO__,
     __NAME_CONFIG_FILE__,
+    __REQUIREMENTS__,
     __SECRETS_CONF_DJANGO__,
     __SETTINGS_CONF_DJANGO__,
     __SETTINGS_DJANGO__,
@@ -58,7 +59,12 @@ class Builder:
         folder: Path = self.__directory / name_folder
         folder.mkdir(exist_ok=True)
 
-    def add_main_folder(self, venv: Environment, name_project: str, /) -> None:
+    def add_main_folder(
+        self,
+        venv: Environment,
+        name_project: str,
+        /,
+    ) -> None:
         """Add a main folder to the project.
 
         Args:
@@ -84,20 +90,23 @@ class Builder:
             self.__directory / name_project / 'settings.py'
         )
 
-        settings_project = self.__directory / 'settings.yaml'
-        settings_project.touch()
-
         secrets_project = self.__directory / '.secrets.yaml'
-        secrets_project.touch()
 
-        gitignore_project = self.__directory / '.gitignore'
-        gitignore_project.touch()
+        files_to_copy = [
+            (__SECRETS_CONF_DJANGO__, secrets_project),
+            (__SETTINGS_DJANGO__, settings_django_project),
+            (__GITIGNORE_DJANGO__, self.__directory / '.gitignore'),
+            (__REQUIREMENTS__, self.__directory / 'requirements.txt'),
+            (__SETTINGS_CONF_DJANGO__, self.__directory / 'settings.yaml'),
+        ]
 
-        shutil.copy2(__SETTINGS_DJANGO__, settings_django_project)
-        shutil.copy2(__SETTINGS_CONF_DJANGO__, settings_project)
-        shutil.copy2(__SECRETS_CONF_DJANGO__, secrets_project)
-        shutil.copy2(__GITIGNORE_DJANGO__, gitignore_project)
+        for source, destination in files_to_copy:
+            shutil.copy2(source, destination)
 
+        self._configure_dynaconf_secret_file(secrets_project)
+        self._configure_settings_django(settings_django_project, name_project)
+
+    def _configure_dynaconf_secret_file(self, secrets_project: Path) -> None:
         with open(secrets_project, 'r', encoding='utf-8') as file:
             _secrets_config = yaml.safe_load(file)
 
@@ -108,6 +117,23 @@ class Builder:
 
         with open(secrets_project, 'w', encoding='utf-8') as file:
             yaml.dump(_secrets_config, file)
+
+    @staticmethod
+    def _configure_settings_django(
+        settings_django: Path,
+        name_project: str,
+    ) -> None:
+        with open(settings_django, 'r+', encoding='utf-8') as file:
+            lines = file.readlines()
+            file.seek(0)
+
+            for line in lines:
+                if "PROJECT_NAME = ''" in line:
+                    line = f'PROJECT_NAME = {name_project!r}\n'
+                file.write(line)
+
+            # Truncates the rest of the file if it is smaller than the original
+            file.truncate()
 
     def add_python_version_file(self, python_version: str, /) -> None:
         """Add a .python-version file to the project.
