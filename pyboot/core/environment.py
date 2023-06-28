@@ -12,6 +12,7 @@ class Environment:
         self.__project_path = project_path
         self.__venv_path = self.__project_path / ".venv"
         self.system = platform.system()
+
         self.__create_venv_path()
 
     @property
@@ -40,7 +41,8 @@ class Environment:
             stdout=open(os.devnull, 'w'),
         )
 
-    def execute(self, command: str, /) -> None:
+    @staticmethod
+    def execute(command: str, /) -> None:
         # command = command.replace('$PYTHON_VENV', str(self.venv_python))
         # args_command = command.split()
 
@@ -51,6 +53,11 @@ class Environment:
             stdout=open(os.devnull, 'w'),
         )
 
+    @staticmethod
+    def export_django_settings(name_project: str, /) -> None:
+        # Export Django settings module into environment variables.
+        os.environ['DJANGO_SETTINGS_MODULE'] = f'{name_project}.settings'
+
     def add_dependency(
         self, dependency: str, *, version: str = 'latest'
     ) -> None:
@@ -60,7 +67,3 @@ class Environment:
         command = f'{self.venv_pip} install {dependency}'
 
         self.execute(command)
-
-    def export_django_settings(self, name_project: str, /) -> None:
-        # Export Django settings module into environment variables.
-        os.environ['DJANGO_SETTINGS_MODULE'] = f'{name_project}.settings'
