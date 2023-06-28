@@ -59,11 +59,23 @@ class Environment:
         os.environ['DJANGO_SETTINGS_MODULE'] = f'{name_project}.settings'
 
     def add_dependency(
-        self, dependency: str, *, version: str = 'latest'
+        self,
+        dependency: str,
+        *,
+        version: str,
     ) -> None:
-        if version != 'latest':
-            dependency += '==' + version
+        _version = list(map(int, version.split('.')))
 
-        command = f'{self.venv_pip} install {dependency}'
+        _next_version = _version.copy()
+        _next_version[1] += 1
+        _next_version.pop()
+
+        version = '.'.join(map(str, _version))
+        next_version = '.'.join(map(str, _next_version))
+
+        command = (
+            f'{self.venv_pip} install'
+            f" '{dependency}>={version},<{next_version}' "
+        )
 
         self.execute(command)
