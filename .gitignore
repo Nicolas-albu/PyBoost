@@ -1,5 +1,11 @@
-scripts/scripts.py
+# Ignore workspace folder of text editor
+.vscode
+
+# Byte-compiled / optimized / DLL files
 __pycache__
 .pytest_cache/
-.vscode
+
+# Ignore project files and directories
+scripts/scripts.py
+scripts/env
 ideas.txt
