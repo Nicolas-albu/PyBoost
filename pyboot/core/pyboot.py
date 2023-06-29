@@ -98,7 +98,7 @@ class PyBoot:
         data['directory'] = str(data['directory'])
 
         # remove False values
-        pyboot_config = dict(filter(lambda item: item[1], data.items()))
+        pyboot_config = {key: value for key, value in data.items() if value}
 
         self.__builder.create_config_file(pyboot_config)
 
