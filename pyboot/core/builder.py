@@ -2,6 +2,7 @@
 This module provides the Builder class for project building operations.
 """
 
+import re
 import secrets
 import shutil
 from pathlib import Path
@@ -115,9 +116,8 @@ class Builder:
             _secrets_config = yaml.safe_load(file)
 
         for stage in __ENVIRONMENT_STAGES__:
-            _secrets_config[stage]['SECRET_KEY'] = self._generate_token(
-                maxsize=60
-            )
+            _token = self._generate_token(maxsize=100)
+            _secrets_config[stage]['SECRET_KEY'] = _token
 
         with open(secrets_project, 'w', encoding='utf-8') as file:
             yaml.dump(_secrets_config, file)
@@ -157,7 +157,7 @@ class Builder:
 
     @staticmethod
     def _generate_token(maxsize: int) -> str:
-        characters = printable.replace(' ', '')
+        characters = re.sub(r'[\s]|[\\]|[\"\']', '', printable)
         _token = ''
 
         for _ in range(maxsize):
