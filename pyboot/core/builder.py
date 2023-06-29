@@ -7,6 +7,7 @@ import secrets
 import shutil
 from pathlib import Path
 from string import printable
+from typing import Generator
 
 import toml
 import yaml
@@ -117,7 +118,7 @@ class Builder:
 
         for stage in __ENVIRONMENT_STAGES__:
             _token = self._generate_token(maxsize=100)
-            _secrets_config[stage]['SECRET_KEY'] = _token
+            _secrets_config[stage]['SECRET_KEY'] = ''.join(tuple(_token))
 
         with open(secrets_project, 'w', encoding='utf-8') as file:
             yaml.dump(_secrets_config, file)
@@ -156,11 +157,19 @@ class Builder:
         makefile.touch()
 
     @staticmethod
-    def _generate_token(maxsize: int) -> str:
+    def _generate_token(maxsize: int) -> Generator:
+        """Generate random tokens using secrets module and given size limit.
+
+        Args:
+            maxsize (int): The maximum size of the token.
+
+        Yield:
+            Generator: A generator that yields a random token.
+
+        The method generates a token by selecting random characters from the
+        printable ASCII characters. It removes any whitespace, backslashes,
+        double quotes, and single quotes from the character set.
+        """
         characters = re.sub(r'[\s]|[\\]|[\"\']', '', printable)
-        _token = ''
 
-        for _ in range(maxsize):
-            _token += secrets.choice(characters)
-
-        return _token
+        yield from (secrets.choice(characters) for _ in range(maxsize))
