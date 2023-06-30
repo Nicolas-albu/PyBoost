@@ -8,12 +8,11 @@ from .settings import __DEFAULT_VENV_NAME__, __VENV_NAMES__
 
 
 class Environment:
-    __slots__ = ['__project_path', 'system', '__venv_path', 'venv_name']
+    __slots__ = ['system', '__project_path', 'venv_name', '__venv_path']
 
     def __init__(self, *, project_path: Path):
-        self.__project_path = project_path
         self.system = platform.system()
-
+        self.__project_path = project_path
         self.venv_name: str | None = self.get_venv()
         self.__venv_path = self.__project_path / (
             self.venv_name if self.venv_name else __DEFAULT_VENV_NAME__
