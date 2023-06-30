@@ -26,6 +26,28 @@ add_python_version="3.10.10"
 'test_pyboot' configured! 🚀
 ```
 
+### :open_mouth: Project files and folders emojis
+
+- :gear: Settings folders and files:
+
+  - [scripts/](/scripts/)
+  - [.gitignore](/.gitignore)
+  - [.python-version](/.python-version)
+  - [pyproject.toml](/pyproject.toml)
+  - [poetry.lock](/poetry.lock)
+
+- :page_with_curl: Documentation files:
+
+  - [README.md](/README.md)
+  - [LICENSE](/LICENSE)
+
+- :hammer_and_wrench: Code folders and files:
+
+  - [pyboot/](/pyboot/)
+
+- :wrench: Test folder:
+  - [tests/](/tests/)
+
 ## :warning: **Warnings**
 
 It's important to note that PyBoot is in the development stage. But if you want to use it anyway, you'll have to:
