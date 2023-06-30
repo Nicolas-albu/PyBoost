@@ -8,7 +8,7 @@ __DEFAULT_VENV_NAME__ = '.venv'
 
 __VENV_NAMES__ = __DEFAULT_VENV_NAME__, 'venv'
 
-# Gets the current path directory.
+# Gets the current project path.
 __CURRENT_PATH__: Path = Path().cwd()
 
 # Gets the name of the folder where PyBoot is running.

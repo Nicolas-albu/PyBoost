@@ -28,15 +28,15 @@ class Builder:
     adding project files.
     """
 
-    __slots__ = ['__directory']
+    __slots__ = ['__project_path']
 
-    def __init__(self, *, directory: Path):
+    def __init__(self, *, project_path: Path):
         """Initialize the Builder instance.
 
         Args:
-            directory: The directory of the project.
+            project_path: The project path.
         """
-        self.__directory: Path = directory
+        self.__project_path: Path = project_path
 
     def create_config_file(self, data: dict, /) -> None:
         """Generate the PyBoot configuration file.
@@ -44,7 +44,7 @@ class Builder:
         Args:
             data: The data to be written to the configuration file.
         """
-        config_file = self.__directory / __NAME_CONFIG_FILE__
+        config_file = self.__project_path / __NAME_CONFIG_FILE__
 
         with open(config_file, 'w', encoding='utf-8') as file:
             toml.dump(data, file)
@@ -55,7 +55,7 @@ class Builder:
         Args:
             name_folder: The name of the folder.
         """
-        folder: Path = self.__directory / name_folder
+        folder: Path = self.__project_path / name_folder
         folder.mkdir(exist_ok=True)
 
     def add_main_folder(
@@ -70,7 +70,7 @@ class Builder:
             name_project: The name of the project.
         """
         command = (
-            f'cd {self.__directory} '
+            f'cd {self.__project_path} '
             f'&& {venv.django_admin} startproject {name_project} .'
         )
 
@@ -78,7 +78,7 @@ class Builder:
 
     def configure_static_folder(self, venv: Environment, /) -> None:
         command = (
-            f'cd {self.__directory} '
+            f'cd {self.__project_path} '
             f'&& {venv.venv_python} manage.py collectstatic'
         )
 
@@ -86,17 +86,17 @@ class Builder:
 
     def add_settings_files(self, name_project: str, /) -> None:
         settings_django_project = (
-            self.__directory / name_project / 'settings.py'
+            self.__project_path / name_project / 'settings.py'
         )
 
-        secrets_project = self.__directory / '.secrets.yaml'
+        secrets_project = self.__project_path / '.secrets.yaml'
 
         target_files = (
             secrets_project,
             settings_django_project,
-            self.__directory / '.gitignore',
-            self.__directory / 'settings.yaml',
-            self.__directory / 'requirements.txt',
+            self.__project_path / '.gitignore',
+            self.__project_path / 'settings.yaml',
+            self.__project_path / 'requirements.txt',
         )
 
         for source, target in zip(
@@ -146,14 +146,14 @@ class Builder:
         Args:
             python_version: The Python version to be written in the file.
         """
-        python_version_file = self.__directory / '.python-version'
+        python_version_file = self.__project_path / '.python-version'
 
         with open(python_version_file, 'w') as file:
             file.write(python_version)
 
     def add_makefile(self) -> None:
         """Add a Makefile to the project."""
-        makefile = self.__directory / 'Makefile'
+        makefile = self.__project_path / 'Makefile'
         makefile.touch()
 
     @staticmethod

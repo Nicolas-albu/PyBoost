@@ -32,7 +32,7 @@ class PyBoot:
         Args:
             **options: Keyword arguments for configuring the PyBoot instance.
                 - name_project: The name of the project.
-                - directory: The directory of the project.
+                - project_path: The project path.
                 - add_python_version: Add the .python-version file to the
                     project with the specified Python version.
                 - add_format: Add the black formatter and isort to the project.
@@ -48,10 +48,10 @@ class PyBoot:
                 project's virtual environment.
         """
         self.__options = options
-        __directory = options['directory']
+        __project_path = options['project_path']
         self.__name_project = self.__options['name_project']
-        self.__builder = Builder(directory=__directory)
-        self.__venv = Environment(project_path=__directory)
+        self.__builder = Builder(project_path=__project_path)
+        self.__venv = Environment(project_path=__project_path)
 
     def run(self) -> Generator:
         """
@@ -94,8 +94,8 @@ class PyBoot:
         Args:
             data: The data used for generating the configuration file.
         """
-        # remove PosixPath of directory
-        data['directory'] = str(data['directory'])
+        # remove PosixPath of project_path
+        data['project_path'] = str(data['project_path'])
 
         # remove False values
         pyboot_config = {key: value for key, value in data.items() if value}

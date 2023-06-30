@@ -23,14 +23,11 @@ def pyboot_controller(
             'Defaults to the current directory name.'
         ),
     ),
-    directory: Path = Option(
+    project_path: Path = Option(
         __CURRENT_PATH__,
-        '--directory',
-        '-d',
-        help=(
-            'The directory of the project. '
-            'Defaults to the current directory.'
-        ),
+        '--path',
+        '-ph',
+        help='The project path. Defaults to the current directory.',
     ),
     add_python_version: str = Option(
         ...,
@@ -66,7 +63,7 @@ def pyboot_controller(
 
     Args:
         name_project: The name of the project.
-        directory: The directory of the project.
+        project_path: The project path.
         add_python_version: Add the .python-version file to the project with
             the specified Python version.
         add_format: Add the black formatter and isort to the project.
@@ -74,12 +71,12 @@ def pyboot_controller(
         with_drf: Add the Django Rest Framework to the project.
     """
 
-    if not isinstance(directory, Path):
-        directory = Path(directory)
+    if not isinstance(project_path, Path):
+        project_path = Path(project_path)
 
     params = {
         'name_project': name_project,
-        'directory': directory,
+        'project_path': project_path,
         'add_python_version': add_python_version,
         'add_format': add_format,
         'add_makefile': add_makefile,
@@ -90,4 +87,4 @@ def pyboot_controller(
     pyboot_project = PyBoot(**params)
 
     beautify.add_status(pyboot_project, name_project)
-    beautify.final_message(directory, name_project)
+    beautify.final_message(project_path, name_project)

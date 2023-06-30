@@ -11,9 +11,9 @@ class BeautifyConsole:
     def __init__(self):
         self.console = Console()
 
-    def final_message(self, directory: Path, name_project: str, /) -> None:
+    def final_message(self, project_path: Path, name_project: str, /) -> None:
         # get the configurations of project
-        pyboot_config = (directory / __NAME_CONFIG_FILE__).read_text()
+        pyboot_config = (project_path / __NAME_CONFIG_FILE__).read_text()
 
         # printing results
         self.console.print(pyboot_config)
