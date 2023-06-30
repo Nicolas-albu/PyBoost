@@ -4,6 +4,10 @@ from pathlib import Path
 
 __NAME_CONFIG_FILE__ = 'pyboot.toml'
 
+__DEFAULT_VENV_NAME__ = '.venv'
+
+__VENV_NAMES__ = __DEFAULT_VENV_NAME__, 'venv'
+
 # Gets the current path directory.
 __CURRENT_PATH__: Path = Path().cwd()
 
