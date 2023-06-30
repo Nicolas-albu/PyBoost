@@ -20,6 +20,7 @@ class Environment:
         )
         if not venv_name:
             self.__create_venv_path()
+        self.__update_venv()
 
     @property
     def venv_pip(self) -> Path:
@@ -41,6 +42,8 @@ class Environment:
 
     def __create_venv_path(self) -> None:
         venv.create(self.__venv_path, with_pip=True)
+
+    def __update_venv(self) -> None:
         subprocess.run(
             [self.venv_pip, 'install', '-U', 'pip', 'setuptools'],
             check=True,
