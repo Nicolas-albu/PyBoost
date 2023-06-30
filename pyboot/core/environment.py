@@ -8,19 +8,16 @@ from .settings import __DEFAULT_VENV_NAME__, __VENV_NAMES__
 
 
 class Environment:
-    __slots__ = ['__project_path', '__venv_path', 'system']
+    __slots__ = ['__project_path', 'system', '__venv_path', 'venv_name']
 
     def __init__(self, *, project_path: Path):
         self.__project_path = project_path
         self.system = platform.system()
 
-        venv_name: str | None = self.get_venv()
+        self.venv_name: str | None = self.get_venv()
         self.__venv_path = self.__project_path / (
-            venv_name if venv_name else __DEFAULT_VENV_NAME__
+            self.venv_name if self.venv_name else __DEFAULT_VENV_NAME__
         )
-        if not venv_name:
-            self.__create_venv_path()
-        self.__update_venv()
 
     @property
     def venv_pip(self) -> Path:
@@ -39,6 +36,11 @@ class Environment:
         if self.system == 'Windows':
             return self.__venv_path / 'Scripts' / 'django-admin.exe'
         return self.__venv_path / 'bin' / 'django-admin'
+
+    def create_venv(self) -> None:
+        if not self.venv_name:
+            self.__create_venv_path()
+        self.__update_venv()
 
     def __create_venv_path(self) -> None:
         venv.create(self.__venv_path, with_pip=True)
