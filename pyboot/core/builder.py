@@ -9,10 +9,10 @@ from pathlib import Path
 from string import printable
 from typing import Generator
 
-import toml
 import yaml
 
 from .environment import Environment
+from .reader import toml_dump
 from .settings import (
     __ENVIRONMENT_STAGES__,
     __NAME_CONFIG_FILE__,
@@ -47,7 +47,7 @@ class Builder:
         config_file = self.__project_path / __NAME_CONFIG_FILE__
 
         with open(config_file, 'w', encoding='utf-8') as file:
-            toml.dump(data, file)
+            toml_dump(data, file)
 
     def add_folder(self, name_folder: str, /) -> None:
         """Add a folder to the project.
