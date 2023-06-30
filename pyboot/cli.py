@@ -71,9 +71,6 @@ def pyboot_controller(
         with_drf: Add the Django Rest Framework to the project.
     """
 
-    if not isinstance(project_path, Path):
-        project_path = Path(project_path)
-
     params = {
         'name_project': name_project,
         'project_path': project_path,
