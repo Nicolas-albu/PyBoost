@@ -67,11 +67,6 @@ class Environment:
             stdout=open(os.devnull, 'w'),
         )
 
-    @staticmethod
-    def export_django_settings(name_project: str, /) -> None:
-        # Export Django settings module into environment variables.
-        os.environ['DJANGO_SETTINGS_MODULE'] = f'{name_project}.settings'
-
     def add_dependency(
         self,
         dependency: str,
