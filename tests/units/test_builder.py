@@ -58,3 +58,12 @@ def test_django_settings_file_configuration(test_builder: Builder):
             break
 
     back_before(file=settings_django)
+
+
+def test_makefile_creation(test_builder: Builder):
+    makefile = debug_path / 'Makefile'
+    test_builder.add_makefile()
+
+    assert makefile.exists()
+
+    back_before(file=makefile)
