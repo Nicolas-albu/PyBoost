@@ -78,3 +78,26 @@ def test_add_folder(test_builder: Builder):
     assert folder.exists()
 
     back_before(folder=folder)
+
+
+def test_config_file_creation(test_builder: Builder):
+    pyboot_file = debug_path / 'pyboot.toml'
+
+    data = {
+        'project_name': 'test_project',
+        'project_path': str(debug_path),
+        'add_python_version': '3.9.1',
+    }
+
+    test_builder.create_config_file(data)
+
+    assert pyboot_file.exists()
+
+    with open(pyboot_file, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+
+    for line, (key, value) in zip(lines, data.items()):
+        if str(key) in line:
+            assert line == f'{key} = "{value}"\n'
+
+    back_before(file=pyboot_file)
