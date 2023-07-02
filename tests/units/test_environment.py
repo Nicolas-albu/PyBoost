@@ -24,13 +24,13 @@ def test_get_venv(test_environment: Environment):
     venv_path = debug_path / '.venv'
     venv_path.mkdir(exist_ok=True)
 
-    assert test_environment.get_venv() == '.venv'
+    assert test_environment.get_venv_name() == '.venv'
     back_before(venv_path=venv_path)
 
     venv_path = debug_path / 'venv'
     venv_path.mkdir(exist_ok=True)
 
-    assert test_environment.get_venv() == 'venv'
+    assert test_environment.get_venv_name() == 'venv'
     back_before(venv_path=venv_path)
 
 
