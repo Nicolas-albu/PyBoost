@@ -1,11 +1,10 @@
 import re
-import shutil
 
 import pytest
 
 from pyboot.core.builder import Builder
 
-from . import back_before, debug_path, fixtures_path
+from . import back_before, debug_path, fixtures_to_debug_folder
 
 
 @pytest.fixture
@@ -37,14 +36,11 @@ def test_python_version_file_creation(test_builder: Builder):
 
 def test_django_settings_file_configuration(test_builder: Builder):
     name_project = 'test_project'
-    fixture_settings_django = (
-        fixtures_path / 'settings_with_name_test_project_.py'
+    settings_django = fixtures_to_debug_folder(
+        fixtures_filename='settings_with_name_test_project_.py',
+        debug_filename='settings.py',
     )
 
-    settings_django = debug_path / 'settings.py'
-    settings_django.touch()
-
-    shutil.copy2(fixture_settings_django, settings_django)
     test_builder._configure_settings_django(settings_django, name_project)
 
     assert settings_django.exists()
