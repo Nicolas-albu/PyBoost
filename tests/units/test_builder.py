@@ -1,10 +1,11 @@
 import re
+import shutil
 
 import pytest
 
 from pyboot.core.builder import Builder
 
-from . import debug_path
+from . import back_before, debug_path, fixtures_path
 
 
 @pytest.fixture
@@ -30,3 +31,30 @@ def test_python_version_file_creation(test_builder: Builder):
 
     assert python_version_file.exists()
     assert python_version_file.read_text() == python_version
+
+    back_before(file=python_version_file)
+
+
+def test_django_settings_file_configuration(test_builder: Builder):
+    name_project = 'test_project'
+    fixture_settings_django = (
+        fixtures_path / 'settings_with_name_test_project_.py'
+    )
+
+    settings_django = debug_path / 'settings.py'
+    settings_django.touch()
+
+    shutil.copy2(fixture_settings_django, settings_django)
+    test_builder._configure_settings_django(settings_django, name_project)
+
+    assert settings_django.exists()
+
+    with open(settings_django, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+
+    for line in lines:
+        if "PROJECT_NAME =" in line:
+            assert line == f"PROJECT_NAME = {name_project!r}\n"
+            break
+
+    back_before(file=settings_django)
