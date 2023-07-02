@@ -12,7 +12,7 @@ def test_builder():
     return Builder(project_path=debug_path)
 
 
-def test_generation_tokens_with_maxsize_100(test_builder: Builder):
+def test_token_generation_with_maxsize_of_100(test_builder: Builder):
     pattern: str = r'[\s]|[\\]|[\"\']'
 
     _token = test_builder._generate_token(maxsize=100)
