@@ -6,8 +6,7 @@ import pytest
 
 from pyboot.core.environment import Environment
 
-units_path = Path().cwd() / 'tests' / 'units'
-debug_path = units_path / 'debug'
+from . import debug_path
 
 
 def back_before(*, venv_path: Optional[Path]):
