@@ -13,10 +13,8 @@ class Environment:
     def __init__(self, *, project_path: Path):
         self.system = platform.system()
         self.__project_path = project_path
-        self.venv_name: str | None = self.get_venv()
-        self.__venv_path = self.__project_path / (
-            self.venv_name if self.venv_name else __DEFAULT_VENV_NAME__
-        )
+        self.venv_name: str | None = self.get_venv_name()
+        self.__venv_path = self.__project_path / self.venv_name
 
     @property
     def venv_pip(self) -> Path:
@@ -37,8 +35,7 @@ class Environment:
         return self.__venv_path / 'bin' / 'django-admin'
 
     def create_venv(self) -> None:
-        if not self.venv_name:
-            self.__create_venv_path()
+        self.__create_venv_path()
         self.__update_venv()
 
     def __create_venv_path(self) -> None:
@@ -51,12 +48,12 @@ class Environment:
             stdout=open(os.devnull, 'w'),
         )
 
-    def get_venv(self) -> str | None:
+    def get_venv_name(self) -> str:
         for venv_name in __VENV_NAMES__:
             if (self.__project_path / venv_name).exists():
                 return venv_name
 
-        return None
+        return __DEFAULT_VENV_NAME__
 
     @staticmethod
     def execute(command: str, /) -> None:
