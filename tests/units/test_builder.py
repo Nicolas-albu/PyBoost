@@ -67,3 +67,14 @@ def test_makefile_creation(test_builder: Builder):
     assert makefile.exists()
 
     back_before(file=makefile)
+
+
+def test_add_folder(test_builder: Builder):
+    folder = 'test_folder'
+    test_builder.add_folder(folder)
+
+    folder = debug_path / folder
+
+    assert folder.exists()
+
+    back_before(folder=folder)
