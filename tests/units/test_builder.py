@@ -1,10 +1,14 @@
 import re
 
 import pytest
+import yaml
 
 from pyboot.core.builder import Builder
+from pyboot.core.settings import __ENVIRONMENT_STAGES__
 
 from . import back_before, debug_path, fixtures_to_debug_folder
+
+TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
 
 
 @pytest.fixture
@@ -13,12 +17,10 @@ def test_builder():
 
 
 def test_token_generation_with_maxsize_of_100(test_builder: Builder):
-    pattern: str = r'[\s]|[\\]|[\"\']'
-
     _token = test_builder._generate_token(maxsize=100)
     token = ''.join(tuple(_token))
 
-    assert re.search(pattern, token) is None
+    assert re.search(TOKEN_PATTERN, token) is None
 
 
 def test_python_version_file_creation(test_builder: Builder):
@@ -97,3 +99,21 @@ def test_config_file_creation(test_builder: Builder):
             assert line == f'{key} = "{value}"\n'
 
     back_before(file=pyboot_file)
+
+
+def test_configure_dynaconf_secret_file(test_builder: Builder):
+    secrets_file = fixtures_to_debug_folder(
+        fixtures_filename='secrets_fixture.yaml',
+        debug_filename='secrets.yaml',
+    )
+
+    test_builder._configure_dynaconf_secret_file(secrets_file)
+
+    with open(secrets_file, 'r', encoding='utf-8') as file:
+        _secrets_config = yaml.safe_load(file)
+
+    for stage in __ENVIRONMENT_STAGES__:
+        token = _secrets_config[stage]['SECRET_KEY']
+        assert re.search(TOKEN_PATTERN, token) is None
+
+    back_before(file=secrets_file)
