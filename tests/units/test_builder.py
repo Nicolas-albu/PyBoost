@@ -183,3 +183,31 @@ def test_add_main_folder(builder: Builder, environment: Environment):
     back_before(folder=main_path)
     back_before(folder=debug_path / '.venv')
     back_before(file=debug_path / 'manage.py')
+
+
+def test_configure_static_folder(builder: Builder, environment: Environment):
+    name_project = 'test_project'
+    main_path = debug_path / name_project
+
+    static_folder = debug_path / 'static'
+    static_folder.mkdir(exist_ok=True)
+
+    environment.create_venv()
+    environment.add_dependency('Django', version='4.2.2')
+
+    builder.add_main_folder(environment, name_project)
+
+    settings_django = main_path / 'settings.py'
+    with open(settings_django, 'a', encoding='utf-8') as file:
+        file.write('\nSTATIC_ROOT = BASE_DIR / "static/"\n')
+
+    builder.configure_static_folder(environment)
+
+    assert (debug_path / 'static' / 'admin' / 'img').exists()
+    assert (debug_path / 'static' / 'admin' / 'css').exists()
+    assert (debug_path / 'static' / 'admin' / 'js').exists()
+
+    back_before(folder=main_path)
+    back_before(folder=debug_path / '.venv')
+    back_before(folder=debug_path / 'static')
+    back_before(file=debug_path / 'manage.py')
