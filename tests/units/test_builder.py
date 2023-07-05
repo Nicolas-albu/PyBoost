@@ -6,16 +6,12 @@ import yaml
 from pytest_mock import MockerFixture
 
 from pyboot.core.builder import Builder
+from pyboot.core.environment import Environment
 from pyboot.core.settings import __ENVIRONMENT_STAGES__
 
 from . import back_before, debug_path, fixtures_to_debug
 
 TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
-
-
-@pytest.fixture
-def builder():
-    yield Builder(project_path=debug_path)
 
 
 @pytest.fixture(
@@ -170,3 +166,20 @@ def test_add_settings_files(
 
     back_before(file=files)
     back_before(folder=main_path)
+
+
+def test_add_main_folder(builder: Builder, environment: Environment):
+    name_project = 'test_project'
+    main_path = debug_path / name_project
+
+    environment.create_venv()
+    environment.add_dependency('Django', version='4.2.2')
+
+    builder.add_main_folder(environment, name_project)
+
+    assert main_path.exists()
+    assert (main_path / 'settings.py').exists()
+
+    back_before(folder=main_path)
+    back_before(folder=debug_path / '.venv')
+    back_before(file=debug_path / 'manage.py')
