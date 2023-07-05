@@ -1,7 +1,9 @@
 import re
+from unittest.mock import MagicMock
 
 import pytest
 import yaml
+from pytest_mock import MockerFixture
 
 from pyboot.core.builder import Builder
 from pyboot.core.settings import __ENVIRONMENT_STAGES__
@@ -14,6 +16,25 @@ TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
 @pytest.fixture
 def builder():
     yield Builder(project_path=debug_path)
+
+
+@pytest.fixture(
+    params={
+        'secrets_dynf': debug_path / '.secrets.yaml',
+        'settings_django': debug_path / 'settings.py',
+        'gitignore': debug_path / '.gitignore',
+        'settings_dynf': debug_path / 'settings.yaml',
+        'requirements': debug_path / 'requirements.txt',
+    }
+)
+def mock_template_django_blank(request):
+    paths = request.param
+    mock = MagicMock()
+
+    mock.__iter__.return_value = iter([*paths.values()])
+
+    yield mock
+    del mock
 
 
 def test_token_generation_with_maxsize_of_100(builder: Builder):
@@ -117,3 +138,35 @@ def test_configure_dynaconf_secret_file(builder: Builder):
         assert re.search(TOKEN_PATTERN, token) is None
 
     back_before(file=secrets_file)
+
+
+def test_add_settings_files(
+    builder: Builder,
+    mocker: MockerFixture,
+):
+    name_project = 'test_project'
+    main_path = debug_path / name_project
+
+    main_path.mkdir(exist_ok=True)
+
+    mocker.patch(
+        'pyboot.core.settings.template_django_blank',
+        return_value=mock_template_django_blank,
+    )
+
+    builder.add_settings_files(name_project)
+
+    files = (
+        debug_path / '.secrets.yaml',
+        main_path / 'settings.py',
+        debug_path / '.gitignore',
+        debug_path / 'settings.yaml',
+        debug_path / 'requirements.txt',
+    )
+
+    for file in files:
+        assert file.exists()
+        assert file.read_text() is not None
+
+    back_before(file=files)
+    back_before(folder=main_path)
