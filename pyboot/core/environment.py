@@ -34,9 +34,14 @@ class Environment:
             return self.__venv_path / 'Scripts' / 'django-admin.exe'
         return self.__venv_path / 'bin' / 'django-admin'
 
-    def create_venv(self) -> None:
-        self.__create_venv_path()
-        self.__update_venv()
+    @staticmethod
+    def execute(command: str, /) -> None:
+        subprocess.run(
+            [command],
+            check=True,
+            shell=True,
+            stdout=open(os.devnull, 'w'),
+        )
 
     def __create_venv_path(self) -> None:
         venv.create(self.__venv_path, with_pip=True)
@@ -55,14 +60,9 @@ class Environment:
 
         return __DEFAULT_VENV_NAME__
 
-    @staticmethod
-    def execute(command: str, /) -> None:
-        subprocess.run(
-            [command],
-            check=True,
-            shell=True,
-            stdout=open(os.devnull, 'w'),
-        )
+    def create_venv(self) -> None:
+        self.__create_venv_path()
+        self.__update_venv()
 
     def add_dependency(
         self,
