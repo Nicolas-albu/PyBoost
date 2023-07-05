@@ -1,6 +1,6 @@
 import shutil
 from pathlib import Path
-from typing import Optional
+from typing import Iterable, Optional
 
 fixtures_path = Path().cwd() / 'tests' / 'fixtures'
 units_path = Path().cwd() / 'tests' / 'units'
@@ -10,13 +10,17 @@ debug_path = units_path / 'debug'
 def back_before(
     *,
     folder: Optional[Path] = None,
-    file: Optional[Path] = None,
+    file: Optional[Path | Iterable[Path]] = None,
 ) -> None:
     if folder:
         shutil.rmtree(folder)
 
-    if file:
+    if isinstance(file, Path):
         file.unlink(missing_ok=True)
+
+    elif isinstance(file, Iterable):
+        for _file in file:
+            _file.unlink(missing_ok=True)
 
 
 def fixtures_to_debug(
