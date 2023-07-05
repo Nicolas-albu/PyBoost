@@ -6,7 +6,7 @@ import yaml
 from pyboot.core.builder import Builder
 from pyboot.core.settings import __ENVIRONMENT_STAGES__
 
-from . import back_before, debug_path, fixtures_to_debug_folder
+from . import back_before, debug_path, fixtures_to_debug
 
 TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
 
@@ -38,8 +38,8 @@ def test_python_version_file_creation(test_builder: Builder):
 
 def test_django_settings_file_configuration(test_builder: Builder):
     name_project = 'test_project'
-    settings_django = fixtures_to_debug_folder(
-        fixtures_filename='settings_with_name_test_project_.py',
+    settings_django = fixtures_to_debug(
+        fixtures_filename='settings_django_with_name_test_project.py',
         debug_filename='settings.py',
     )
 
@@ -102,9 +102,9 @@ def test_config_file_creation(test_builder: Builder):
 
 
 def test_configure_dynaconf_secret_file(test_builder: Builder):
-    secrets_file = fixtures_to_debug_folder(
+    secrets_file = fixtures_to_debug(
         fixtures_filename='secrets_fixture.yaml',
-        debug_filename='secrets.yaml',
+        debug_filename='.secrets.yaml',
     )
 
     test_builder._configure_dynaconf_secret_file(secrets_file)
