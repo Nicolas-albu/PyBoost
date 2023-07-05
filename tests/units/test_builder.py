@@ -12,21 +12,21 @@ TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
 
 
 @pytest.fixture
-def test_builder():
-    return Builder(project_path=debug_path)
+def builder():
+    yield Builder(project_path=debug_path)
 
 
-def test_token_generation_with_maxsize_of_100(test_builder: Builder):
-    _token = test_builder._generate_token(maxsize=100)
+def test_token_generation_with_maxsize_of_100(builder: Builder):
+    _token = builder._generate_token(maxsize=100)
     token = ''.join(tuple(_token))
 
     assert re.search(TOKEN_PATTERN, token) is None
 
 
-def test_python_version_file_creation(test_builder: Builder):
+def test_python_version_file_creation(builder: Builder):
     python_version: str = '3.9.1'
 
-    test_builder.add_python_version_file(python_version)
+    builder.add_python_version_file(python_version)
 
     python_version_file = debug_path / '.python-version'
 
@@ -36,14 +36,14 @@ def test_python_version_file_creation(test_builder: Builder):
     back_before(file=python_version_file)
 
 
-def test_django_settings_file_configuration(test_builder: Builder):
+def test_django_settings_file_configuration(builder: Builder):
     name_project = 'test_project'
     settings_django = fixtures_to_debug(
         fixtures_filename='settings_django_with_name_test_project.py',
         debug_filename='settings.py',
     )
 
-    test_builder._configure_settings_django(settings_django, name_project)
+    builder._configure_settings_django(settings_django, name_project)
 
     assert settings_django.exists()
 
@@ -58,18 +58,18 @@ def test_django_settings_file_configuration(test_builder: Builder):
     back_before(file=settings_django)
 
 
-def test_makefile_creation(test_builder: Builder):
+def test_makefile_creation(builder: Builder):
     makefile = debug_path / 'Makefile'
-    test_builder.add_makefile()
+    builder.add_makefile()
 
     assert makefile.exists()
 
     back_before(file=makefile)
 
 
-def test_add_folder(test_builder: Builder):
+def test_add_folder(builder: Builder):
     folder = 'test_folder'
-    test_builder.add_folder(folder)
+    builder.add_folder(folder)
 
     folder = debug_path / folder
 
@@ -78,7 +78,7 @@ def test_add_folder(test_builder: Builder):
     back_before(folder=folder)
 
 
-def test_config_file_creation(test_builder: Builder):
+def test_config_file_creation(builder: Builder):
     pyboot_file = debug_path / 'pyboot.toml'
 
     data = {
@@ -87,7 +87,7 @@ def test_config_file_creation(test_builder: Builder):
         'add_python_version': '3.9.1',
     }
 
-    test_builder.create_config_file(data)
+    builder.create_config_file(data)
 
     assert pyboot_file.exists()
 
@@ -101,13 +101,13 @@ def test_config_file_creation(test_builder: Builder):
     back_before(file=pyboot_file)
 
 
-def test_configure_dynaconf_secret_file(test_builder: Builder):
+def test_configure_dynaconf_secret_file(builder: Builder):
     secrets_file = fixtures_to_debug(
         fixtures_filename='secrets_fixture.yaml',
         debug_filename='.secrets.yaml',
     )
 
-    test_builder._configure_dynaconf_secret_file(secrets_file)
+    builder._configure_dynaconf_secret_file(secrets_file)
 
     with open(secrets_file, 'r', encoding='utf-8') as file:
         _secrets_config = yaml.safe_load(file)
