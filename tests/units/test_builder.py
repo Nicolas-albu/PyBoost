@@ -9,18 +9,18 @@ from pyboot.core.builder import Builder
 from pyboot.core.environment import Environment
 from pyboot.core.settings import __ENVIRONMENT_STAGES__
 
-from . import back_before, debug_path, fixtures_to_debug
+from . import back_before, fixtures_to_debug, out_path
 
 TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
 
 
 @pytest.fixture(
     params={
-        'secrets_dynf': debug_path / '.secrets.yaml',
-        'settings_django': debug_path / 'settings.py',
-        'gitignore': debug_path / '.gitignore',
-        'settings_dynf': debug_path / 'settings.yaml',
-        'requirements': debug_path / 'requirements.txt',
+        'secrets_dynf': out_path / '.secrets.yaml',
+        'settings_django': out_path / 'settings.py',
+        'gitignore': out_path / '.gitignore',
+        'settings_dynf': out_path / 'settings.yaml',
+        'requirements': out_path / 'requirements.txt',
     }
 )
 def mock_template_django_blank(request):
@@ -45,7 +45,7 @@ def test_python_version_file_creation(builder: Builder):
 
     builder.add_python_version_file(python_version)
 
-    python_version_file = debug_path / '.python-version'
+    python_version_file = out_path / '.python-version'
 
     assert python_version_file.exists()
     assert python_version_file.read_text() == python_version
@@ -76,7 +76,7 @@ def test_django_settings_file_configuration(builder: Builder):
 
 
 def test_makefile_creation(builder: Builder):
-    makefile = debug_path / 'Makefile'
+    makefile = out_path / 'Makefile'
     builder.add_makefile()
 
     assert makefile.exists()
@@ -88,7 +88,7 @@ def test_add_folder(builder: Builder):
     folder = 'test_folder'
     builder.add_folder(folder)
 
-    folder = debug_path / folder
+    folder = out_path / folder
 
     assert folder.exists()
 
@@ -96,11 +96,11 @@ def test_add_folder(builder: Builder):
 
 
 def test_config_file_creation(builder: Builder):
-    pyboot_file = debug_path / 'pyboot.toml'
+    pyboot_file = out_path / 'pyboot.toml'
 
     data = {
         'project_name': 'test_project',
-        'project_path': str(debug_path),
+        'project_path': str(out_path),
         'add_python_version': '3.9.1',
     }
 
@@ -141,7 +141,7 @@ def test_add_settings_files(
     mocker: MockerFixture,
 ):
     name_project = 'test_project'
-    main_path = debug_path / name_project
+    main_path = out_path / name_project
 
     main_path.mkdir(exist_ok=True)
 
@@ -153,11 +153,11 @@ def test_add_settings_files(
     builder.add_settings_files(name_project)
 
     files = (
-        debug_path / '.secrets.yaml',
+        out_path / '.secrets.yaml',
         main_path / 'settings.py',
-        debug_path / '.gitignore',
-        debug_path / 'settings.yaml',
-        debug_path / 'requirements.txt',
+        out_path / '.gitignore',
+        out_path / 'settings.yaml',
+        out_path / 'requirements.txt',
     )
 
     for file in files:
@@ -170,7 +170,7 @@ def test_add_settings_files(
 
 def test_add_main_folder(builder: Builder, environment: Environment):
     name_project = 'test_project'
-    main_path = debug_path / name_project
+    main_path = out_path / name_project
 
     environment.create_venv()
     environment.add_dependency('Django', version='4.2.2')
@@ -181,15 +181,15 @@ def test_add_main_folder(builder: Builder, environment: Environment):
     assert (main_path / 'settings.py').exists()
 
     back_before(folder=main_path)
-    back_before(folder=debug_path / '.venv')
-    back_before(file=debug_path / 'manage.py')
+    back_before(folder=out_path / '.venv')
+    back_before(file=out_path / 'manage.py')
 
 
 def test_configure_static_folder(builder: Builder, environment: Environment):
     name_project = 'test_project'
-    main_path = debug_path / name_project
+    main_path = out_path / name_project
 
-    static_folder = debug_path / 'static'
+    static_folder = out_path / 'static'
     static_folder.mkdir(exist_ok=True)
 
     environment.create_venv()
@@ -203,11 +203,11 @@ def test_configure_static_folder(builder: Builder, environment: Environment):
 
     builder.configure_static_folder(environment)
 
-    assert (debug_path / 'static' / 'admin' / 'img').exists()
-    assert (debug_path / 'static' / 'admin' / 'css').exists()
-    assert (debug_path / 'static' / 'admin' / 'js').exists()
+    assert (out_path / 'static' / 'admin' / 'img').exists()
+    assert (out_path / 'static' / 'admin' / 'css').exists()
+    assert (out_path / 'static' / 'admin' / 'js').exists()
 
     back_before(folder=main_path)
-    back_before(folder=debug_path / '.venv')
-    back_before(folder=debug_path / 'static')
-    back_before(file=debug_path / 'manage.py')
+    back_before(folder=out_path / '.venv')
+    back_before(folder=out_path / 'static')
+    back_before(file=out_path / 'manage.py')
