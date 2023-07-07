@@ -4,7 +4,7 @@ from typing import Iterable, Optional
 
 fixtures_path = Path().cwd() / 'tests' / 'fixtures'
 units_path = Path().cwd() / 'tests' / 'units'
-debug_path = units_path / 'debug'
+out_path = units_path / 'out'
 
 
 def back_before(
@@ -29,7 +29,7 @@ def fixtures_to_debug(
     debug_filename: str,
     debug_folder: Optional[Path] = None,
 ) -> Path:
-    _debug_folder = debug_folder if debug_folder else debug_path
+    _debug_folder = debug_folder if debug_folder else out_path
 
     fixture_file = fixtures_path / fixtures_filename
     debug_file = _debug_folder / debug_filename
@@ -45,7 +45,7 @@ __all__ = [
     # paths
     'fixtures_path',
     'units_path',
-    'debug_path',
+    'out_path',
     # functions
     'back_before',
     'fixtures_to_debug',
