@@ -1,13 +1,15 @@
 import pytest
-from typer.testing import CliRunner, Result
+from click.testing import Result
+from typer.testing import CliRunner
 
-from pyboost import app, get_path_name
+from pyboot import app
+from pyboot.core import __PATH_NAME__
 
 runner = CliRunner()
 
 
 class TestProjectSettings:
-    OTHER_NAME = "TestPyBoost"
+    OTHER_NAME = "TestPyBoot"
 
     @pytest.fixture
     def test_with_default_name(self):
@@ -25,12 +27,12 @@ class TestProjectSettings:
         assert test_with_other_name.exit_code == 0
         assert '"add_python_version": "3.10"' in test_with_other_name.stdout
 
-    def test_version(
+    def test_name_project(
         self, test_with_default_name: Result, test_with_other_name: Result
     ):
         assert test_with_default_name.exit_code == 0
         assert (
-            f'"name_project": "{get_path_name()}"'
+            f'"name_project": "{__PATH_NAME__}"'
             in test_with_default_name.stdout
         )
         assert test_with_other_name.exit_code == 0

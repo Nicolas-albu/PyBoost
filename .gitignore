@@ -1,3 +1,11 @@
-pyboost.json
-scripts/
+# Ignore workspace folder of text editor
+.vscode
+
+# Byte-compiled / optimized / DLL files
 __pycache__
+.pytest_cache/
+
+# Ignore project files and directories
+scripts/scripts.py
+scripts/env
+ideas.txt
