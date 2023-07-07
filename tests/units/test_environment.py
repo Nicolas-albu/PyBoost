@@ -1,16 +1,16 @@
 from pyboot.core.environment import Environment
 
-from . import back_before, debug_path
+from . import back_before, out_path
 
 
 def test_get_venv(environment: Environment):
-    venv_path = debug_path / '.venv'
+    venv_path = out_path / '.venv'
     venv_path.mkdir(exist_ok=True)
 
     assert environment.get_venv_name() == '.venv'
     back_before(folder=venv_path)
 
-    venv_path = debug_path / 'venv'
+    venv_path = out_path / 'venv'
     venv_path.mkdir(exist_ok=True)
 
     assert environment.get_venv_name() == 'venv'
@@ -19,7 +19,7 @@ def test_get_venv(environment: Environment):
 
 def test_create_venv(environment: Environment):
     environment.create_venv()
-    venv_path = debug_path / '.venv'
+    venv_path = out_path / '.venv'
 
     assert environment.venv_name == '.venv'
     assert venv_path.exists()
