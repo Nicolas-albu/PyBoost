@@ -7,6 +7,5 @@ __pycache__
 
 # Ignore project files and directories
 scripts/scripts.py
-tests/units/debug
 scripts/env
 ideas.txt
