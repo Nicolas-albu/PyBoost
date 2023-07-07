@@ -23,7 +23,7 @@ TOKEN_PATTERN: str = r'[\s]|[\\]|[\"\']'
         'requirements': out_path / 'requirements.txt',
     }
 )
-def mock_template_django_blank(request):
+def mock_django_blank(request):
     paths = request.param
     mock = MagicMock()
 
@@ -146,8 +146,8 @@ def test_add_settings_files(
     main_path.mkdir(exist_ok=True)
 
     mocker.patch(
-        'pyboot.core.settings.template_django_blank',
-        return_value=mock_template_django_blank,
+        'pyboot.core.templates.django_blank',
+        return_value=mock_django_blank,
     )
 
     builder.add_settings_files(name_project)
