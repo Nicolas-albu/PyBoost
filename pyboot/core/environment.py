@@ -13,7 +13,7 @@ class Environment:
     def __init__(self, *, project_path: Path):
         self.system = platform.system()
         self.__project_path = project_path
-        self.venv_name: str | None = self.get_venv_name()
+        self.venv_name: str = self.get_venv_name()
         self.__venv_path = self.__project_path / self.venv_name
 
     @property
@@ -61,7 +61,8 @@ class Environment:
         return __DEFAULT_VENV_NAME__
 
     def create_venv(self) -> None:
-        self.__create_venv_path()
+        if not self.__venv_path.exists():
+            self.__create_venv_path()
         self.__update_venv()
 
     def add_dependency(
