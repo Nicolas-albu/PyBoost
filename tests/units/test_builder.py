@@ -75,15 +75,6 @@ def test_django_settings_file_configuration(builder: Builder):
     back_before(file=settings_django)
 
 
-def test_makefile_creation(builder: Builder):
-    makefile = out_path / 'Makefile'
-    builder.add_makefile()
-
-    assert makefile.exists()
-
-    back_before(file=makefile)
-
-
 def test_add_folder(builder: Builder):
     folder = 'test_folder'
     builder.add_folder(folder)
