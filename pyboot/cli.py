@@ -38,6 +38,12 @@ def pyboot_controller(
             'to the project with the specified Python version.'
         ),
     ),
+    template: str = Option(
+        None,
+        '--template',
+        '-t',
+        help='The name of the template to be used.',
+    ),
     add_format: bool = Option(
         False,
         '--add-format',
@@ -71,10 +77,14 @@ def pyboot_controller(
         with_drf: Add the Django Rest Framework to the project.
     """
 
+    if not template:
+        template = beautify.ask_template()
+
     params = {
         'name_project': name_project,
         'project_path': project_path,
         'add_python_version': add_python_version,
+        'template': template,
         'add_format': add_format,
         'add_makefile': add_makefile,
         'with_drf': with_drf,
