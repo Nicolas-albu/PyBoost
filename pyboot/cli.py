@@ -51,13 +51,6 @@ def pyboot_controller(
         '-f',
         help='Add the black formatter and isort.',
     ),
-    add_makefile: bool = Option(
-        False,
-        '--add-makefile',
-        '-makefile',
-        '-make',
-        help='Add makefile to project.',
-    ),
     with_drf: bool = Option(
         False,
         '--with-drf',
@@ -73,7 +66,6 @@ def pyboot_controller(
         add_python_version: Add the .python-version file to the project with
             the specified Python version.
         add_format: Add the black formatter and isort to the project.
-        add_makefile: Add a makefile to the project.
         with_drf: Add the Django Rest Framework to the project.
     """
 
@@ -81,13 +73,12 @@ def pyboot_controller(
         template = beautify.ask_template()
 
     params = {
+        'template': template,
+        'with_drf': with_drf,
+        'format': add_format,
         'name_project': name_project,
         'project_path': project_path,
-        'add_python_version': add_python_version,
-        'template': template,
-        'add_format': add_format,
-        'add_makefile': add_makefile,
-        'with_drf': with_drf,
+        'python_version': add_python_version,
     }
 
     # building projects with PyBoot configuration
