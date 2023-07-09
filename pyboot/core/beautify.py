@@ -1,10 +1,11 @@
 from datetime import datetime
 from pathlib import Path
 
+import questionary as question
 from rich.console import Console
 
 from .pyboot import PyBoot
-from .settings import __NAME_CONFIG_FILE__
+from .settings import __NAME_CONFIG_FILE__, __TEMPLATES_NAME__
 
 
 class BeautifyConsole:
@@ -34,3 +35,9 @@ class BeautifyConsole:
                 self.console.print(
                     f'[bold yellow]{actual_hour} [bold blue]{task}'
                 )
+
+    def ask_template(self) -> str:
+        return question.select(
+            'What is the template?',
+            choices=__TEMPLATES_NAME__,
+        ).ask()
