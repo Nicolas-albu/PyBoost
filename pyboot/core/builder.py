@@ -162,8 +162,3 @@ class Builder:
 
         with open(python_version_file, 'w') as file:
             file.write(python_version)
-
-    def add_makefile(self) -> None:
-        """Add a Makefile to the project."""
-        makefile = self.__project_path / 'Makefile'
-        makefile.touch()
