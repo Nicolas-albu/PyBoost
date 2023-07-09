@@ -36,7 +36,6 @@ class PyBoot:
                 - add_python_version: Add the .python-version file to the
                     project with the specified Python version.
                 - add_format: Add the black formatter and isort to the project.
-                - add_makefile: Add a makefile to the project.
                 - with_drf: Add the Django Rest Framework to the project.
 
         Attributes:
@@ -64,12 +63,9 @@ class PyBoot:
         self.__create_pyboot_config_file(self.__options)
         self.__create_folders('docs', 'static', 'media', 'templates', 'apps')
 
-        if self.__options['add_python_version']:
-            python_version = self.__options['add_python_version']
+        if self.__options['python_version']:
+            python_version = self.__options['python_version']
             self.__builder.add_python_version_file(python_version)
-
-        if self.__options['add_makefile']:
-            self.__builder.add_makefile()
 
         yield 'General settings completed'
 
