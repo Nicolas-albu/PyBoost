@@ -5,7 +5,7 @@ __NAME_CONFIG_FILE__ = 'pyboot.toml'
 
 __DEFAULT_VENV_NAME__ = '.venv'
 
-__VENV_NAMES__ = __DEFAULT_VENV_NAME__, 'venv'
+__VENV_NAMES__ = __DEFAULT_VENV_NAME__, 'venv', 'env'
 
 # Gets the current project path.
 __CURRENT_PATH__: Path = Path().cwd()
