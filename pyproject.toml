@@ -14,6 +14,7 @@ python = "^3.10"
 typer-cli = "^0.0.13"
 rich = "^13.3.3"
 pyyaml = "^6.0"
+questionary = "^1.10.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

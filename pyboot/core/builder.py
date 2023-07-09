@@ -13,11 +13,8 @@ import yaml
 
 from .environment import Environment
 from .reader import toml_dump
-from .settings import (
-    __ENVIRONMENT_STAGES__,
-    __NAME_CONFIG_FILE__,
-    template_django_blank,
-)
+from .settings import __ENVIRONMENT_STAGES__, __NAME_CONFIG_FILE__
+from .templates import django_blank
 
 
 class Builder:
@@ -145,10 +142,7 @@ class Builder:
             self.__project_path / 'requirements.txt',
         )
 
-        for source, target in zip(
-            template_django_blank,
-            target_files,
-        ):
+        for source, target in zip(django_blank, target_files):
             target.touch()
             shutil.copy2(source, target)
 

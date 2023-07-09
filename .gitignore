@@ -6,6 +6,6 @@ __pycache__
 .pytest_cache/
 
 # Ignore project files and directories
-scripts/scripts.py
+.scripts.py
 scripts/env
 ideas.txt
