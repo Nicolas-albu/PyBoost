@@ -1,5 +1,5 @@
 from .beautify import BeautifyConsole
-from .pyboot import PyBoot
+from .pyboot import PyBootDirector
 from .settings import (
     __CURRENT_PATH__,
     __NAME_CONFIG_FILE__,
@@ -10,7 +10,7 @@ from .settings import (
 
 __all__ = [
     # pyboot
-    'PyBoot',
+    'PyBootDirector',
     # settings
     '__PATH_NAME__',
     '__VENV_NAMES__',
