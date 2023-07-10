@@ -17,7 +17,7 @@ def django_blank_builder(environment: Environment):
         'template': 'django_blank',
         'with_drf': True,
         'format': True,
-        'name_project': 'test_project',
+        'project_name': 'test_project',
         'project_path': out_path,
         'python_version': '3.10.10',
     }
