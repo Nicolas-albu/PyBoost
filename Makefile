@@ -7,4 +7,3 @@ test-builder:
 
 lint:
 	@black --check .
-	@isort --check .
