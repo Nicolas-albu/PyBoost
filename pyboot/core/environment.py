@@ -3,6 +3,7 @@ import platform
 import subprocess
 import venv
 from pathlib import Path
+from typing import Optional
 
 from .settings import __DEFAULT_VENV_NAME__, __VENV_NAMES__
 
@@ -69,20 +70,20 @@ class Environment:
         self,
         dependency: str,
         *,
-        version: str,
+        version: Optional[str] = None,
     ) -> None:
-        _version = list(map(int, version.split('.')))
+        if version:
+            _version = list(map(int, version.split('.')))
 
-        _next_version = _version.copy()
-        _next_version[1] += 1
-        _next_version.pop()
+            _next_version = _version.copy()
+            _next_version[1] += 1
+            _next_version.pop()
 
-        version = '.'.join(map(str, _version))
-        next_version = '.'.join(map(str, _next_version))
+            version = '.'.join(map(str, _version))
+            next_version = '.'.join(map(str, _next_version))
 
-        command = (
-            f'{self.venv_pip} install'
-            f" '{dependency}>={version},<{next_version}' "
-        )
+            dependency = f'{dependency}>={version},<{next_version}'
+
+        command = f'{self.venv_pip} install {dependency!r}'
 
         self.execute(command)
