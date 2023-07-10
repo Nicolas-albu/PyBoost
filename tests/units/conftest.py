@@ -1,6 +1,6 @@
 import pytest
 
-from pyboot.core.builder import Builder
+from pyboot.core.builder import DjangoBlankBuilder
 from pyboot.core.environment import Environment
 
 from . import out_path
@@ -12,5 +12,14 @@ def environment():
 
 
 @pytest.fixture
-def builder():
-    yield Builder(project_path=out_path)
+def django_blank_builder(environment: Environment):
+    options = {
+        'template': 'django_blank',
+        'with_drf': True,
+        'format': True,
+        'name_project': 'test_project',
+        'project_path': out_path,
+        'python_version': '3.10.10',
+    }
+
+    yield DjangoBlankBuilder(venv=environment, options=options)
