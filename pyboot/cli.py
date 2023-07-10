@@ -6,7 +6,12 @@ from pathlib import Path
 
 from typer import Option, Typer
 
-from .core import __CURRENT_PATH__, __PATH_NAME__, BeautifyConsole, PyBoot
+from .core import (
+    __CURRENT_PATH__,
+    __PATH_NAME__,
+    BeautifyConsole,
+    PyBootDirector,
+)
 
 beautify = BeautifyConsole()
 app = Typer(pretty_exceptions_show_locals=False)
@@ -14,10 +19,10 @@ app = Typer(pretty_exceptions_show_locals=False)
 
 @app.command(help='Configure PyBoot for python projects.')
 def pyboot_controller(
-    name_project: str = Option(
+    project_name: str = Option(
         __PATH_NAME__,
         '--name-project',
-        '-np',
+        '-n',
         help=(
             'The name of the project. '
             'Defaults to the current directory name.'
@@ -25,14 +30,14 @@ def pyboot_controller(
     ),
     project_path: Path = Option(
         __CURRENT_PATH__,
-        '--path',
-        '-ph',
+        '--directory',
+        '-d',
         help='The project path. Defaults to the current directory.',
     ),
     add_python_version: str = Option(
         ...,
-        '--python-version',
-        '-pv',
+        '--version',
+        '-v',
         help=(
             'Add the .python-version file '
             'to the project with the specified Python version.'
@@ -46,8 +51,7 @@ def pyboot_controller(
     ),
     add_format: bool = Option(
         False,
-        '--add-format',
-        '-format',
+        '--format',
         '-f',
         help='Add the black formatter and isort.',
     ),
@@ -72,17 +76,15 @@ def pyboot_controller(
     if not template:
         template = beautify.ask_template()
 
-    params = {
-        'template': template,
-        'with_drf': with_drf,
-        'format': add_format,
-        'name_project': name_project,
-        'project_path': project_path,
-        'python_version': add_python_version,
-    }
-
     # building projects with PyBoot configuration
-    pyboot_project = PyBoot(**params)
+    pyboot = PyBootDirector(
+        project_path=project_path,
+        project_name=project_name,
+        template=template,
+        with_drf=with_drf,
+        format=add_format,
+        python_version=add_python_version,
+    )
 
-    beautify.add_status(pyboot_project, name_project)
-    beautify.final_message(project_path, name_project)
+    beautify.add_status(pyboot)
+    beautify.final_message(project_path, project_name)
